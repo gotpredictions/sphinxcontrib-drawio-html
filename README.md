@@ -71,5 +71,5 @@ Do file issues if you see something, or better yet open a pull request :-)
 
 ## ACKNOWLEDGEMENTS
 
-1. This is inspired by the work done by here:  https://github.com/Modelmat/sphinxcontrib-drawio
-2. HTML/CSS experise is generously provided by https://github.com/BabyManisha
+1. This is inspired by the work done earlier here:  https://github.com/Modelmat/sphinxcontrib-drawio
+2. HTML/CSS expertise is generously provided by https://github.com/BabyManisha
