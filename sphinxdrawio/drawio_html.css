@@ -1,0 +1,51 @@
+div.drawio-data {
+    display: none;
+}
+div.drawio-custom-style {
+    display: none;
+}
+
+div.drawio-html-container-div {
+    margin-bottom: 10pt;
+}
+
+div.drawio-html-navigation {
+    float: left;
+    width: max-content;
+    margin-right: 5pt;
+}
+
+div.drawio-html-navigation-container span {
+    margin-right: 5pt;
+    cursor: pointer;
+}
+
+div.drawio-html-navigation span.drawio-current {
+    padding-bottom: 1pt;
+    border-bottom: 2pt solid #2980B9;
+}
+
+div.drawio-html-navigation-options {
+    width: min-content;
+    float: right;
+}
+
+div.drawio-html-navigation-container {
+    width: 100%;
+    min-height: 16pt;
+    margin-bottom: 5pt;
+}
+
+div.drawio-html-graph-caption {
+    width: 100%;
+    min-height: 16pt;
+    border-bottom: 1pt #2980B9 solid;
+    margin: 5pt 0pt;
+}
+
+div.drawio-html-graph-container {
+    border: 1pt solid lightgray;
+    padding: 10pt;
+    box-sizing: unset;
+    overflow: auto;
+}
