@@ -96,23 +96,23 @@ function mxClientOnLoad(stylesheet)
 
         mxfile.find("diagram").each(function(){
 
-            count = count + 1
+            count = count + 1;
 
-            diagram = $(this)
+            diagram = $(this);
             xml = diagram.text();		
-            xml = decodeURIComponent(bytesToString(pako.inflateRaw(atob(xml))))
-            diagram_name = diagram.attr("name")
+            xml = decodeURIComponent(bytesToString(pako.inflateRaw(Uint8Array.from(atob(xml), c => c.charCodeAt(0)), {to: 'string'})));
+            diagram_name = diagram.attr("name");
 
             $(dio_container.find(".drawio-html-navigation")[0]).append(
                 "<span class='drawio-html-navigation-item' onclick='showSlection(event.target)'>"+diagram_name+"</span>"
-            )
+            );
             
             var div = document.createElement('div');
-            div.className = "drawio-html-graph"
-            div.setAttribute("graph-name", diagram_name)
+            div.className = "drawio-html-graph";
+            div.setAttribute("graph-name", diagram_name);
             // div.id = "graph-"+diagram.attr("id")
-            $(dio_container.find(".drawio-html-graph-container")[0]).append("<div class='drawio-html-graph-caption'>"+diagram_name+"</div>")
-            $(dio_container.find(".drawio-html-graph-container")[0]).append(div)
+            $(dio_container.find(".drawio-html-graph-container")[0]).append("<div class='drawio-html-graph-caption'>"+diagram_name+"</div>");
+            $(dio_container.find(".drawio-html-graph-container")[0]).append(div);
 
             graph = new mxGraph(div);
             graph.resetViewOnRootChange = false;
