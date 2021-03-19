@@ -1,16 +1,4 @@
 
-function bytesToString(arr)
-{
-    var str = '';
-
-    for (var i = 0; i < arr.length; i++)
-    {
-        str += String.fromCharCode(arr[i]);
-    }
-
-    return str;
-};
-
 function getRoot(target) {
     dio_container = $(target)
     while(!dio_container.hasClass('drawio-html-container-div')) 
@@ -100,7 +88,7 @@ function mxClientOnLoad(stylesheet)
 
             diagram = $(this);
             xml = diagram.text();		
-            xml = decodeURIComponent(bytesToString(pako.inflateRaw(Uint8Array.from(atob(xml), c => c.charCodeAt(0)), {to: 'string'})));
+            xml = decodeURIComponent(pako.inflateRaw(Uint8Array.from(atob(xml), c => c.charCodeAt(0)), {to: 'string'}));
             diagram_name = diagram.attr("name");
 
             $(dio_container.find(".drawio-html-navigation")[0]).append(
