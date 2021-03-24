@@ -89,9 +89,6 @@ def render_drawio_html(self: HTMLTranslator, node: drawio_html):
         node -> drawio_html object
     """
     filename = node["filename"]
-    print("\n\n\n")
-    print(type(self))
-    print("\n\n\n")
     try:
         with open(filename) as fp:
             content = minidom.parse(filename).firstChild
