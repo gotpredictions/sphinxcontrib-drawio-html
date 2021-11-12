@@ -5,6 +5,7 @@ import platform
 from hashlib import sha1
 from typing import Dict, Any, List
 import uuid
+import json
 
 import sphinx
 from docutils import nodes
@@ -61,7 +62,7 @@ class DrawIOHTML(SphinxDirective):
         if "page" in self.options:
             node["page"] = self.options["page"]
         node["doc_name"] = self.env.docname
-        
+
         if "hide-nav" in self.options:
             node["hide-nav"] = True
             node["expanded"] = True
@@ -71,7 +72,7 @@ class DrawIOHTML(SphinxDirective):
                 node["expanded"] = True
             else:
                 node["expanded"] = False
-        
+
         if "force-name" in self.options:
             node["force-name"] = True
         else:
@@ -89,40 +90,57 @@ def render_drawio_html(self: HTMLTranslator, node: drawio_html):
         node -> drawio_html object
     """
     filename = node["filename"]
-    print("\n\n\n")
-    print(type(self))
-    print("\n\n\n")
     try:
         with open(filename) as fp:
             content = minidom.parse(filename).firstChild
 
             if 'page' in node:
                 to_remove = [
-                    (d.getAttribute('name'), d) for d in content.getElementsByTagName('diagram') 
+                    (d.getAttribute('name'), d) for d in content.getElementsByTagName('diagram')
                                if d.getAttribute('name') not in node["page"]
                 ]
                 for _dummy, n in to_remove:
                     content.removeChild(n)
             main_id = uuid.uuid4().hex[:8]
 
-            self.body.append('<div id="{id}" '.format(id=main_id))
-            if node["expanded"]:
-                self.body.append("drawio-expanded=1 ")
-            if node["hide-nav"]:
-                self.body.append("drawio-nonav=1 ")
-            if node["force-name"]:
-                self.body.append("drawio-show-name=1 ")
-            self.body.append('class="drawio-html-container-div">\n')
-            
-            if "styles" in node:
-                for s, o, value in node["styles"].xitems():
-                    styleset.add("div#{id} {style}\n".format(id=main_id, style=value))
+            # Prepare DOM node
+            diag = {
+                #'edit': '_blank',
+                'highlight': '#0000ff',
+                'nav': False if node["hide-nav"] else True,
+                'resize': True,
+                'toolbar': 'pages zoom layers tags lightbox',
+                'xml': content.toxml(),
+            }
+            attr = minidom.Text()
+            attr.data = json.dumps(diag)
 
-            self.body.append('<div class="drawio-data">\n')
-            # Format of the content is <mxfile> <diagram></diagram></mxfile>
-            self.body.append(content.toxml())
-            self.body.append('</div>\n')
-            self.body.append('</div>\n')
+            # Append node
+            self.body.append(
+                '<div class="mxgraph" style="max-width:100%;border:1px solid transparent;{style}" data-mxgraph="{graph}"></div>'.format(
+                    graph=attr.toxml(),
+                    style=node.get("styles", ""),
+                )
+            )
+
+            #self.body.append('<div id="{id}" '.format(id=main_id))
+            #if node["expanded"]:
+            #    self.body.append("drawio-expanded=1 ")
+            #if node["hide-nav"]:
+            #    self.body.append("drawio-nonav=1 ")
+            #if node["force-name"]:
+            #    self.body.append("drawio-show-name=1 ")
+            #self.body.append('class="drawio-html-container-div">\n')
+            #
+            #if "styles" in node:
+            #    for s, o, value in node["styles"].xitems():
+            #        styleset.add("div#{id} {style}\n".format(id=main_id, style=value))
+            #
+            #self.body.append('<div class="drawio-data">\n')
+            ## Format of the content is <mxfile> <diagram></diagram></mxfile>
+            #self.body.append(content.toxml())
+            #self.body.append('</div>\n')
+            #self.body.append('</div>\n')
 
     except DrawIOError as e:
         logger.warning("drawio filename: {}: {}".format(filename, e))
